@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelulusan Cuti Gantian</title>
+</head>
+<body>
+    <h2>Kelulusan Permohonan Cuti Gantian</h2>
+    <form action="/approval" method="post">
+        <fieldset>
+            <legend>B. Kelulusan Ketua Jabatan</legend>
+
+            <label for="nama_pemohon">Nama Pemohon:</label>
+            <input type="text" id="nama_pemohon" name="nama_pemohon" required><br><br>
+
+            <label for="status_ketua">Status Kelulusan:</label>
+            <select id="status_ketua" name="status_ketua" required>
+                <option value="Diluluskan">Diluluskan</option>
+                <option value="Tidak Diluluskan">Tidak Diluluskan</option>
+            </select><br><br>
+
+            <label for="ulasan_ketua">Ulasan:</label><br>
+            <textarea id="ulasan_ketua" name="ulasan_ketua" rows="4" cols="50"></textarea><br><br>
+
+            <label for="tarikh_ketua">Tarikh:</label>
+            <input type="date" id="tarikh_ketua" name="tarikh_ketua" required><br><br>
+
+            <label for="tandatangan_ketua">Tandatangan Ketua Jabatan:</label>
+            <input type="text" id="tandatangan_ketua" name="tandatangan_ketua" required><br><br>
+        </fieldset>
+
+        <input type="submit" value="Hantar Kelulusan">
+    </form>
+</body>
+</html>

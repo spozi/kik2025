@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borang Permohonan Cuti Gantian</title>
+    <script>
+        function addRow() {
+            var table = document.getElementById("overtimeTable");
+            var row = table.insertRow(-1);
+            row.innerHTML = `
+                <td><input type="date" name="tarikh_kerja[]" required></td>
+                <td><input type="time" name="masa_kerja[]" required></td>
+                <td><input type="number" name="tempoh_kerja[]" required></td>
+                <td><input type="text" name="tujuan_kerja[]" required></td>
+                <td><button type="button" onclick="removeRow(this)">Hapus</button></td>
+            `;
+        }
+        
+        function removeRow(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+      document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("tarikh_kelulusan").valueAsDate = new Date();
+        });
+</script>
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("tarikh_permohonan").valueAsDate = new Date();
+        });
+    </script>
+</head>
+<body>
+    <h2>Universiti Utara Malaysia - Borang Permohonan Cuti Ganti</h2>
+    <form action="#" method="post">
+        <fieldset>
+            <legend>A. Butir Permohonan</legend>
+            <label for="nama_pemohon">Nama Pemohon:</label>
+            <input type="text" id="nama_pemohon" name="nama_pemohon" required><br><br>
+            
+            <label for="no_kakitangan">No. Kakitangan:</label>
+            <input type="text" id="no_kakitangan" name="no_kakitangan" required><br><br>
+            
+            <label for="jawatan">Jawatan:</label>
+            <input type="text" id="jawatan" name="jawatan" required><br><br>
+            
+            <label for="jabatan">Jabatan/Kolej:</label>
+            <input type="text" id="jabatan" name="jabatan" required><br><br>
+            
+            <label for="jumlah_cuti">Jumlah Cuti Dipohon:</label>
+            <input type="number" id="jumlah_cuti" name="jumlah_cuti" required> hari
+            <p>(9 jam bertugas bersamaan satu (1) hari cuti gantian)</p>
+            
+            <label>Maklumat kerja lebih masa:</label>
+            <table id="overtimeTable" border="1">
+                <tr>
+                    <th>Tarikh</th>
+                    <th>Masa</th>
+                    <th>Tempoh (jam)</th>
+                    <th>Tujuan & Tempat Bertugas</th>
+                    <th>Tindakan</th>
+                </tr>
+                <tr>
+                    <td><input type="date" name="tarikh_kerja[]" required></td>
+                    <td><input type="time" name="masa_kerja[]" required></td>
+                    <td><input type="number" name="tempoh_kerja[]" required></td>
+                    <td><input type="text" name="tujuan_kerja[]" required></td>
+                    <td><button type="button" onclick="removeRow(this)">Hapus</button></td>
+                </tr>
+            </table>
+            <button type="button" onclick="addRow()">Tambah Rekod</button>
+            <br><br>
+            
+            <label for="tarikh_permohonan">Tarikh:</label>
+            <input type="date" id="tarikh_permohonan" name="tarikh_permohonan" required readonly><br><br>
+            
+            <label for="tandatangan_pemohon">Tandatangan Pemohon:</label>
+            <input type="text" id="tandatangan_pemohon" name="tandatangan_pemohon" required><br><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>B. Kelulusan Ketua Pusat Tanggungjawab</legend>
+            <label for="status_kelulusan">* Diluluskan/Tidak Diluluskan:</label>
+            <select id="status_kelulusan" name="status_kelulusan" required>
+                <option value="diluluskan">Diluluskan</option>
+                <option value="tidak_diluluskan">Tidak Diluluskan</option>
+            </select><br><br>
+            
+            <label for="cuti_diluluskan">Cuti Gantian sebanyak:</label>
+            <input type="number" id="cuti_diluluskan" name="cuti_diluluskan"> hari
+            <p>(Dengan syarat tidak membuat tuntutan elaun kerja lebih masa pada masa yang sama)</p>
+            
+            <label for="tarikh_kelulusan">Tarikh:</label>
+            <input type="date" id="tarikh_kelulusan" name="tarikh_kelulusan" required readonly><br><br>
+            
+            <label for="nama_ketua">Nama Ketua:</label>
+            <input type="text" id="nama_ketua" name="nama_ketua" required><br><br>
+            
+            <label for="cop_jawatan">Cop Jawatan:</label>
+            <input type="text" id="cop_jawatan" name="cop_jawatan" required><br><br>
+            
+            <label for="tandatangan_ketua">Tandatangan:</label>
+            <input type="text" id="tandatangan_ketua" name="tandatangan_ketua" required><br><br>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Untuk Kegunaan Pejabat</legend>
+            <label for="catatan_pejabat">Catatan:</label><br>
+            <textarea id="catatan_pejabat" name="catatan_pejabat" rows="4" cols="50"></textarea><br><br>
+        </fieldset>
+        
+        <input type="submit" value="Hantar Permohonan">
+    </form>
+</body>
+</html>

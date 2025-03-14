@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Kelulusan</title>
+</head>
+<body>
+    <h2>Dashboard Kelulusan Cuti Gantian</h2>
+    <table border="1">
+        <tr>
+            <th>Nama Pemohon</th>
+            <th>Jumlah Cuti</th>
+            <th>Tarikh Permohonan</th>
+            <th>Status</th>
+            <th>Tindakan</th>
+        </tr>
+        {% for application in leave_applications %}
+        <tr>
+            <td>{{ application.nama_pemohon }}</td>
+            <td>{{ application.jumlah_cuti }} hari</td>
+            <td>{{ application.tarikh_permohonan }}</td>
+            <td>{{ application.status_permohonan }}</td>
+            <td>
+                <form method="post" action="{{ url_for('approver') }}">
+                    <input type="hidden" name="application_id" value="{{ application.id }}">
+                    <select name="status_permohonan" required>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                    <textarea name="ulasan_ketua" rows="2" cols="20" placeholder="Ulasan"></textarea>
+                    <input type="date" name="tarikh_kelulusan" required>
+                    <input type="text" name="tandatangan_ketua" placeholder="Tandatangan Ketua" required>
+                    <button type="submit">Kemaskini</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

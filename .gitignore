@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+.envrc
+.pip-cache/
+
+# Flask instance and logs
+instance/
+logs/
+*.log
+
+# Database files
+*.sqlite3
+*.db
+migrations/
+
+# Flask environment variables
+.env
+*.env
+config.py
+config.yaml
+config.json
+
+# VS Code
+.vscode/
+
+# JetBrains (PyCharm)
+.idea/
+
+# Other editors
+*.swp
+*.swo
+
+# Docker files
+docker-compose.override.yml
+*.dockerfile
+
+# AWS, Heroku, etc.
+.terraform/
+.heroku/
