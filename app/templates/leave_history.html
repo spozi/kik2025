@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Sejarah Permohonan Cuti</title>
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <h2>Sejarah Permohonan Cuti Gantian</h2>
+    <table border="1">
+        <tr>
+            <th>Nama Pemohon</th>
+            <th>Jumlah Cuti</th>
+            <th>Tarikh Permohonan</th>
+            <th>Tarikh Kelulusan</th>
+            <th>Status</th>
+            <th>Ulasan Ketua</th>
+        </tr>
+        {% for application in leave_history %}
+        <tr>
+            <td>{{ application.nama_pemohon }}</td>
+            <td>{{ application.jumlah_cuti }} hari</td>
+            <td>{{ application.tarikh_permohonan }}</td>
+            <td>{{ application.tarikh_kelulusan }}</td>
+            <td>{{ application.status_permohonan }}</td>
+            <td>{{ application.ulasan_ketua }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

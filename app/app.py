@@ -1,11 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cuti_gantian.db'  # SQLite database file
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = 'static/uploads'  # Folder to store uploaded files
 db = SQLAlchemy(app)
+
+# Ensure the upload folder exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Database Model for Leave Applications
 class LeaveApplication(db.Model):
@@ -21,6 +26,7 @@ class LeaveApplication(db.Model):
     masa_kerja = db.Column(db.String(500), nullable=False)  # Store as JSON string
     tempoh_kerja = db.Column(db.String(500), nullable=False)  # Store as JSON string
     tujuan_kerja = db.Column(db.String(500), nullable=False)  # Store as JSON string
+    dokumen_sokongan = db.Column(db.String(200), nullable=False)  # Path to the uploaded file
     status_permohonan = db.Column(db.String(50), default='Pending')  # Approval status
     ulasan_ketua = db.Column(db.Text, nullable=True)
     tarikh_kelulusan = db.Column(db.Date, nullable=True)
@@ -54,6 +60,15 @@ def applicant():
         tempoh_kerja_list = request.form.getlist("tempoh_kerja[]")
         tujuan_kerja_list = request.form.getlist("tujuan_kerja[]")
 
+        # Handle file upload
+        dokumen_sokongan = request.files["dokumen_sokongan"]
+        if dokumen_sokongan:
+            filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{dokumen_sokongan.filename}"
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            dokumen_sokongan.save(filepath)
+        else:
+            return "Error: Dokumen sokongan diperlukan."
+
         # Save leave application
         new_application = LeaveApplication(
             nama_pemohon=nama_pemohon,
@@ -66,7 +81,8 @@ def applicant():
             tarikh_kerja=','.join(tarikh_kerja_list),  # Store as comma-separated string
             masa_kerja=','.join(masa_kerja_list),  # Store as comma-separated string
             tempoh_kerja=','.join(tempoh_kerja_list),  # Store as comma-separated string
-            tujuan_kerja=','.join(tujuan_kerja_list)  # Store as comma-separated string
+            tujuan_kerja=','.join(tujuan_kerja_list),  # Store as comma-separated string
+            dokumen_sokongan=filename  # Store the file name
         )
         db.session.add(new_application)
         db.session.commit()
@@ -103,6 +119,13 @@ def approver():
     # Fetch all leave applications for the approver to view
     leave_applications = LeaveApplication.query.all()
     return render_template("approver.html", leave_applications=leave_applications)
+
+# Leave History Page
+@app.route("/leave_history")
+def leave_history():
+    # Fetch all leave applications from the database
+    leave_history = LeaveApplication.query.all()
+    return render_template("leave_history.html", leave_history=leave_history)
 
 if __name__ == "__main__":
     app.run(debug=True)
