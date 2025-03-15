@@ -5,6 +5,36 @@
     <title>Sejarah Permohonan Cuti</title>
     <!-- Link to the CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <!-- Include jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        .print-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 2px;
+        }
+        .print-button:hover {
+            background-color: #45a049;
+        }
+        .support-button {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 2px;
+        }
+        .support-button:hover {
+            background-color: #007B9E;
+        }
+    </style>
 </head>
 <body>
     <h2>Sejarah Permohonan Cuti Gantian</h2>
@@ -16,17 +46,65 @@
             <th>Tarikh Kelulusan</th>
             <th>Status</th>
             <th>Ulasan Ketua</th>
+            <th>Tindakan</th>
         </tr>
         {% for application in leave_history %}
         <tr>
             <td>{{ application.nama_pemohon }}</td>
             <td>{{ application.jumlah_cuti }} hari</td>
-            <td>{{ application.tarikh_permohonan }}</td>
-            <td>{{ application.tarikh_kelulusan }}</td>
+            <td>{{ application.tarikh_permohonan.strftime('%Y-%m-%d') }}</td>
+            <td>
+                {% if application.tarikh_kelulusan %}
+                    {{ application.tarikh_kelulusan.strftime('%Y-%m-%d') }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
             <td>{{ application.status_permohonan }}</td>
-            <td>{{ application.ulasan_ketua }}</td>
+            <td>{{ application.ulasan_ketua if application.ulasan_ketua else '-' }}</td>
+            <td>
+                <!-- Cetak PDF Button -->
+                <button class="print-button" onclick="printToPDF(
+                    '{{ application.id }}',
+                    '{{ application.nama_pemohon }}',
+                    '{{ application.jumlah_cuti }}',
+                    '{{ application.tarikh_permohonan.strftime('%Y-%m-%d') }}',
+                    '{{ application.tarikh_kelulusan.strftime('%Y-%m-%d') if application.tarikh_kelulusan else '-' }}',
+                    '{{ application.status_permohonan }}',
+                    '{{ application.ulasan_ketua if application.ulasan_ketua else '-' }}'
+                )">Cetak PDF</button>
+
+                <!-- Cetak Dokumen Sokongan Button -->
+                {% if application.dokumen_sokongan %}
+                    <button class="support-button" onclick="window.open('{{ url_for('static', filename='uploads/' + application.dokumen_sokongan) }}', '_blank')">Cetak Dokumen Sokongan</button>
+                {% else %}
+                    <button class="support-button" disabled>Tiada Dokumen</button>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </table>
+
+    <script>
+        // Function to generate and download PDF
+        function printToPDF(id, namaPemohon, jumlahCuti, tarikhPermohonan, tarikhKelulusan, status, ulasanKetua) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Add content to the PDF
+            doc.setFontSize(18);
+            doc.text("Maklumat Permohonan Cuti", 10, 10);
+            doc.setFontSize(12);
+            doc.text(`Nama Pemohon: ${namaPemohon}`, 10, 20);
+            doc.text(`Jumlah Cuti: ${jumlahCuti} hari`, 10, 30);
+            doc.text(`Tarikh Permohonan: ${tarikhPermohonan}`, 10, 40);
+            doc.text(`Tarikh Kelulusan: ${tarikhKelulusan}`, 10, 50);
+            doc.text(`Status: ${status}`, 10, 60);
+            doc.text(`Ulasan Ketua: ${ulasanKetua}`, 10, 70);
+
+            // Save the PDF
+            doc.save(`Permohonan_Cuti_${namaPemohon}.pdf`);
+        }
+    </script>
 </body>
 </html>
